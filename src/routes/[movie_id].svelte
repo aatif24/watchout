@@ -15,8 +15,16 @@
 	import { onMount } from 'svelte';
 	import Loader from '../components/loader.svelte';
 	import Cast from '../components/cast.svelte';
-
-	import { fetchMovie, movie, fetchPeople, people, fetchImages, loading } from '../store/movies';
+	let tmdbImgLink = 'https://image.tmdb.org/t/p/';
+	import {
+		fetchMovie,
+		movie,
+		fetchPeople,
+		people,
+		fetchImages,
+		loading,
+		whereToWatch
+	} from '../store/movies';
 
 	onMount(() => {
 		loading.set(true);
@@ -26,21 +34,31 @@
 	let imgSearched = false;
 	let bgImg;
 	let poster;
+	let watchNow = {};
 	const image = async (ids) => {
 		if (ids.tmdb) {
 			let res = await fetchImages(ids.tmdb);
 			if (res.backdrops && res.backdrops.length) {
 				bgImg =
-					'https://image.tmdb.org/t/p/w780' +
+					tmdbImgLink +
+					'w780' +
 					res.backdrops[Math.floor(Math.random() * res.backdrops.length)].file_path;
 			}
 			if (res.posters && res.posters.length) {
 				poster =
-					'https://image.tmdb.org/t/p/w342' +
+					tmdbImgLink +
+					'w342' +
 					res.posters[Math.floor(Math.random() * res.posters.length)].file_path;
 			}
 		}
 		imgSearched = true;
+	};
+	const watch = async (ids) => {
+		if (ids.tmdb) {
+			let res = await whereToWatch(ids.tmdb);
+			watchNow = res?.results?.IN;
+			console.log(watchNow);
+		}
 	};
 </script>
 
@@ -48,19 +66,68 @@
 	<Loader />
 {:else}
 	{#await $movie then data}
-		<section image-source={image(data.ids)}>
+		<section image-source={image(data.ids)} watch-sourse={watch(data.ids)}>
 			<img src={bgImg} alt="bg-image" class="background" />
 			<div class="d-flex mt-5 px-3 content">
 				<div class="me-4 d-none d-md-block">
 					<img class="poster" src={poster} alt={data.title} />
 				</div>
 				<div class="d-flex flex-column justify-content-between">
-					<div class="date-rating d-flex flex-column-reverse ">
-						<p class="">{data.released}</p>
-						<p class="h3">
-							<i class="icon fas fa-star" />
-							{Math.round((data.rating + Number.EPSILON) * 10) / 10}
-						</p>
+					<div class="date-rating d-flex justify-content-between ">
+						<div>
+							<p class="h3">
+								<i class="icon fas fa-star" />
+								{Math.round((data.rating + Number.EPSILON) * 10) / 10}
+							</p>
+							<p class="">{data.released}</p>
+						</div>
+						<div class="watch-source  d-flex flex-column">
+							{#if watchNow.flatrate}
+								<p class="m-0 p-0 fs-6">stream</p>
+								<div class="d-flex">
+									{#each watchNow.flatrate as sourse}
+										<div class="sourse-img  p-1">
+											<a href={watchNow.link}>
+												<img
+													src={tmdbImgLink + 'w92' + sourse.logo_path}
+													alt={sourse.provider_name}
+												/>
+											</a>
+										</div>
+									{/each}
+								</div>
+							{/if}
+							{#if watchNow.buy}
+								<p class="m-0 p-0 fs-6">buy</p>
+								<div class="d-flex">
+									{#each watchNow.buy as sourse}
+										<div class="sourse-img  p-1">
+											<a href={watchNow.link}>
+												<img
+													src={tmdbImgLink + 'w92' + sourse.logo_path}
+													alt={sourse.provider_name}
+												/>
+											</a>
+										</div>
+									{/each}
+								</div>
+							{/if}
+							{#if watchNow.rent}
+								<p class="m-0 p-0 fs-6">rent</p>
+								<div class="d-flex">
+									{#each watchNow.rent as sourse}
+										<div class="sourse-img  p-1">
+											<a href={watchNow.link}>
+												<img
+													src={tmdbImgLink + 'w92' + sourse.logo_path}
+													alt={sourse.provider_name}
+												/>
+											</a>
+										</div>
+									{/each}
+								</div>
+							{/if}
+						</div>
 					</div>
 					<div>
 						<p class="h1 title">
@@ -89,6 +156,9 @@
 {/if}
 
 <style lang="scss">
+	.fs-6 {
+		font-size: 0.7rem !important;
+	}
 	section {
 		overflow: hidden;
 		height: 80vh;
@@ -111,6 +181,14 @@
 		}
 		.genre {
 			font-size: 12px;
+		}
+		.watch-source {
+			// position: absolute;
+			right: 1rem;
+			img {
+				display: inline-block;
+				width: 30px;
+			}
 		}
 		.icon {
 			color: yellow;
@@ -147,11 +225,13 @@
 					display: block !important;
 				}
 			}
+			.overview {
+				width: 100% !important;
+			}
 			.tagline {
 				margin-bottom: 20px;
 			}
 			.date-rating {
-				flex-direction: row-reverse !important;
 				justify-content: space-between;
 			}
 			.cast-container {
@@ -164,11 +244,6 @@
 					margin: 0 auto;
 				}
 			}
-		}
-	}
-	@media (max-width: 1200px) {
-		.overview {
-			width: 100% !important;
 		}
 	}
 </style>

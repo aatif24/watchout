@@ -115,6 +115,13 @@ export const fetchImages = async (id, type = 'movie') => {
 	return await response.json();
 };
 
+export const whereToWatch = async (id, type = 'movie') => {
+	let response = await fetch(
+		`${tmdbApi}${type}/${id}/watch/providers?api_key=${tmdbKey}&language=en`
+	);
+	return await response.json();
+};
+
 const serialize = (obj) => {
 	var str = [];
 	for (var p in obj)
