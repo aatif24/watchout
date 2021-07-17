@@ -81,10 +81,10 @@
 							</p>
 							<p class="">{data.released}</p>
 						</div>
-						<div class="watch-source  d-flex flex-column">
+						<div class="watch-source  d-flex flex-column justify-content-end">
 							{#if watchNow.flatrate}
-								<p class="m-0 p-0 fs-6">stream</p>
-								<div class="d-flex">
+								<p class="m-0 p-0 fs-6 text-end">stream</p>
+								<div class="d-flex justify-content-end">
 									{#each watchNow.flatrate as sourse}
 										<div class="sourse-img  p-1">
 											<a href={watchNow.link}>
@@ -98,8 +98,8 @@
 								</div>
 							{/if}
 							{#if watchNow.buy}
-								<p class="m-0 p-0 fs-6">buy</p>
-								<div class="d-flex">
+								<p class="m-0 p-0 fs-6 text-end">buy</p>
+								<div class="d-flex justify-content-end">
 									{#each watchNow.buy as sourse}
 										<div class="sourse-img  p-1">
 											<a href={watchNow.link}>
@@ -113,8 +113,8 @@
 								</div>
 							{/if}
 							{#if watchNow.rent}
-								<p class="m-0 p-0 fs-6">rent</p>
-								<div class="d-flex">
+								<p class="m-0 p-0 fs-6 text-end">rent</p>
+								<div class="d-flex justify-content-end">
 									{#each watchNow.rent as sourse}
 										<div class="sourse-img  p-1">
 											<a href={watchNow.link}>
