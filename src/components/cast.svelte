@@ -8,9 +8,7 @@
 		if (ids.tmdb) {
 			let res = await fetchImages(ids.tmdb, 'person');
 			if (res.profiles && res.profiles.length) {
-				img =
-					'https://image.tmdb.org/t/p/w500' +
-					res.profiles[0].file_path;
+				img = 'https://image.tmdb.org/t/p/w500' + res.profiles[0].file_path;
 			}
 		}
 		imgSearched = true;
@@ -72,18 +70,28 @@
 			width: 80%;
 			position: absolute;
 			bottom: -1rem;
-			left: .5rem;
+			left: 0.5rem;
 		}
 		.name {
 			width: 80%;
 			position: absolute;
 			bottom: 1rem;
-			left: .5rem;
+			left: 0.5rem;
 		}
 		.icon {
 			width: 100% !important;
 			height: 100% !important;
 			color: rgba(128, 128, 128, 0.486);
+		}
+	}
+
+	@media (max-width: 767px) {
+		.cast {
+			.title {
+				p {
+					font-size: 12px !important;
+				}
+			}
 		}
 	}
 </style>

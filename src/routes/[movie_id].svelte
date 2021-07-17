@@ -50,8 +50,8 @@
 	{#await $movie then data}
 		<section image-source={image(data.ids)}>
 			<img src={bgImg} alt="bg-image" class="background" />
-			<div class="d-flex mt-5 px-3">
-				<div class="me-4">
+			<div class="d-flex mt-5 px-3 content">
+				<div class="me-4 d-none d-md-block">
 					<img class="poster" src={poster} alt={data.title} />
 				</div>
 				<div class="d-flex flex-column justify-content-between">
@@ -63,12 +63,12 @@
 						</p>
 					</div>
 					<div>
-						<p class="h1">
+						<p class="h1 title">
 							{data.title}
 							<small class="genre fw-lighter text-capitalize">{data.genres.join(', ')}</small>
 						</p>
-						<p class="h3 fw-light mb-2">{data.tagline && data.tagline}</p>
-						<p class="fw-lighter  w-75 m-0">{data.overview}</p>
+						<p class="h3 tagline fw-light mb-2">{data.tagline && data.tagline}</p>
+						<p class="fw-lighter overview w-75 m-0">{data.overview}</p>
 					</div>
 				</div>
 			</div>
@@ -77,7 +77,7 @@
 				<div class="cast-container container-fluid">
 					<div class="row w-100">
 						{#each casts.cast as cast, i}
-							<div class="p-3  col-md-2 col-lg-2 col-sm-6">
+							<div class="p-3  col-md-3 col-lg-2 col-6">
 								<Cast {cast} />
 							</div>
 						{/each}
@@ -125,6 +125,50 @@
 				min-height: 25vh;
 				box-shadow: -1px 0rem 10px 1px rgb(255 0 0 / 25%) !important;
 			}
+		}
+	}
+	@media (max-width: 1200px) {
+		section {
+			height: 100%;
+			overflow: auto;
+			.background {
+				display: none;
+			}
+			.content {
+				margin-top: 1rem !important;
+			}
+			.overview {
+				width: 100% !important;
+			}
+			.title {
+				margin-top: 10px;
+				margin-bottom: 10px;
+				.genre {
+					display: block !important;
+				}
+			}
+			.tagline {
+				margin-bottom: 20px;
+			}
+			.date-rating {
+				flex-direction: row-reverse !important;
+				justify-content: space-between;
+			}
+			.cast-container {
+				margin-top: 20px;
+				height: 100%;
+				overflow: auto;
+				position: inherit;
+				bottom: 0;
+				.row {
+					margin: 0 auto;
+				}
+			}
+		}
+	}
+	@media (max-width: 1200px) {
+		.overview {
+			width: 100% !important;
 		}
 	}
 </style>

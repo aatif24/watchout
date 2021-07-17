@@ -1,13 +1,18 @@
 <script>
+	import { goto } from '$app/navigation';
+
 	import { filter } from '../store/movies';
 	import Search from '../components/search.svelte';
 	import Filter from '../components/filter.svelte';
+	const goHome = () => {
+		goto('/');
+	};
 </script>
 
 <div class="container-fluid">
 	<div class="top mt-5 my-4">
 		<div class="_filter-text">
-			<h3 class="text-capitalize">{$filter}</h3>
+			<h3 class="text-capitalize home" on:click={() => goHome()}>{$filter}</h3>
 		</div>
 
 		<div class="_search">
@@ -31,6 +36,9 @@
 	.top {
 		display: flex;
 		justify-content: space-between;
+		.home {
+			cursor: pointer;
+		}
 		._search {
 			width: 100%;
 		}
