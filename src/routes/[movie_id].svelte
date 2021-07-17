@@ -53,11 +53,13 @@
 		}
 		imgSearched = true;
 	};
+
 	const watch = async (ids) => {
 		if (ids.tmdb) {
 			let res = await whereToWatch(ids.tmdb);
-			watchNow = res?.results?.IN;
-			console.log(watchNow);
+			if (res?.results) {
+				watchNow = res?.results?.IN;
+			}
 		}
 	};
 </script>
@@ -82,7 +84,7 @@
 							<p class="">{data.released}</p>
 						</div>
 						<div class="watch-source  d-flex flex-column justify-content-end">
-							{#if watchNow.flatrate}
+							{#if watchNow?.flatrate}
 								<p class="m-0 p-0 fs-6 text-end">stream</p>
 								<div class="d-flex justify-content-end">
 									{#each watchNow.flatrate as sourse}
@@ -97,7 +99,7 @@
 									{/each}
 								</div>
 							{/if}
-							{#if watchNow.buy}
+							{#if watchNow?.buy}
 								<p class="m-0 p-0 fs-6 text-end">buy</p>
 								<div class="d-flex justify-content-end">
 									{#each watchNow.buy as sourse}
@@ -112,7 +114,7 @@
 									{/each}
 								</div>
 							{/if}
-							{#if watchNow.rent}
+							{#if watchNow?.rent}
 								<p class="m-0 p-0 fs-6 text-end">rent</p>
 								<div class="d-flex justify-content-end">
 									{#each watchNow.rent as sourse}
