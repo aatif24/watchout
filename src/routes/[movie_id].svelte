@@ -25,6 +25,7 @@
 		loading,
 		whereToWatch
 	} from '../store/movies';
+	import { loop_guard } from 'svelte/internal';
 
 	onMount(() => {
 		loading.set(true);
@@ -143,8 +144,8 @@
 			</div>
 
 			{#await $people then casts}
-				<div class="cast-container container-fluid">
-					<div class="row w-100">
+				<div class="cast-container container-fluid" on:scroll={(e) => console.log(e)}>
+					<div class="row w-100 mx-auto">
 						{#each casts.cast as cast, i}
 							<div class="p-3  col-md-3 col-lg-2 col-6">
 								<Cast {cast} />
@@ -162,8 +163,8 @@
 		font-size: 0.7rem !important;
 	}
 	section {
-		overflow: hidden;
-		height: 80vh;
+		overflow: auto;
+		// height: 80vh;
 		.background {
 			height: 100%;
 			background-repeat: no-repeat;
@@ -192,15 +193,19 @@
 				width: 30px;
 			}
 		}
+		.content {
+			margin-top: 1rem !important;
+			margin-bottom: 1rem !important;
+		}
 		.icon {
 			color: yellow;
 		}
 		.cast-container {
-			margin-top: 13rem;
-			height: 43vh;
+			margin-top: 1rem;
+			height: 50vh;
+			position: sticky;
 			overflow: auto;
-			position: absolute;
-			bottom: 0;
+			top: 0px;
 			.cast {
 				min-height: 25vh;
 				box-shadow: -1px 0rem 10px 1px rgb(255 0 0 / 25%) !important;
@@ -216,6 +221,7 @@
 			}
 			.content {
 				margin-top: 1rem !important;
+				margin-bottom: 1rem !important;
 			}
 			.overview {
 				width: 100% !important;
